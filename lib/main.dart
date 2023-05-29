@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:homework3_viewmodel_pageview/main/main_view.dart';
+import 'package:homework3_viewmodel_pageview/provider/page_provider.dart';
+import 'package:homework3_viewmodel_pageview/provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: 
+  [
+    ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
+    ChangeNotifierProvider<PageProvider>(create: (_) => PageProvider()),
+  ]
+  , child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
