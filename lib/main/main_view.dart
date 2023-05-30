@@ -14,23 +14,31 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: PageView(
-          onPageChanged: (value) {
+        body: _pageView(context),
+        bottomNavigationBar: _navBar(context));
+  }
+
+  PageView _pageView(BuildContext context) {
+    return PageView(
+        onPageChanged: (value) {
+          context.read<PageProvider>().changePage(value);
+          print(context.read<PageProvider>().getCurrentIndex().toString());
+        },
+        controller: _pageController,
+        children: pageList.pageList.map((e) => e.page).toList(),
+      );
+  }
+
+  BottomNavigationBar _navBar(BuildContext context) {
+    return BottomNavigationBar(
+          currentIndex: context.watch<PageProvider>().getCurrentIndex(),
+          onTap: (value) {
             context.read<PageProvider>().changePage(value);
-            print(context.read<PageProvider>().getCurrentIndex().toString());
+            _pageController.jumpToPage(value);
           },
-          controller: _pageController,
-          children: pageList.pageList.map((e) => e.page).toList(),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-            currentIndex: context.watch<PageProvider>().getCurrentIndex(),
-            onTap: (value) {
-              context.read<PageProvider>().changePage(value);
-              _pageController.jumpToPage(value);
-            },
-            items: NavbarViewModel.navbarList
-                .map((e) => BottomNavigationBarItem(
-                    icon: Icon(e.iconData), label: e.label))
-                .toList()));
+          items: NavbarViewModel.navbarList
+              .map((e) => BottomNavigationBarItem(
+                  icon: Icon(e.iconData), label: e.label))
+              .toList());
   }
 }
